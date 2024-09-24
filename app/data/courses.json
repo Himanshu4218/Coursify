@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "category": "Web Development",
+    "image": "/webdev.jpg",
+    "title": "Complete Web Development Bootcamp",
+    "description": "Learn HTML, CSS, JavaScript, and React to build modern web applications from scratch.",
+    "price": 199.99
+  },
+  {
+    "id": "2",
+    "category": "Data Science",
+    "image": "/datascience.jpg",
+    "title": "Data Science and Machine Learning",
+    "description": "Master data analysis, visualization, and machine learning using Python and R.",
+    "price": 249.99
+  },
+  {
+    "id": "3",
+    "category": "Design",
+    "image": "/design.jpg",
+    "title": "UI/UX Design Essentials",
+    "description": "Learn the principles of user interface and user experience design with hands-on projects.",
+    "price": 149.99
+  },
+  {
+    "id": "4",
+    "category": "Programming",
+    "image": "/programming.jpg",
+    "title": "Python Programming for Beginners",
+    "description": "Get started with Python programming and learn the basics of coding, functions, and algorithms.",
+    "price": 99.99
+  },
+  {
+    "id": "5",
+    "category": "Marketing",
+    "image": "/blog.png",
+    "title": "Digital Marketing Mastery",
+    "description": "Learn how to create and implement digital marketing strategies, including SEO, SEM, and social media marketing.",
+    "price": 179.99
+  },
+  {
+    "id": "6",
+    "category": "Business",
+    "image": "/business.jpg",
+    "title": "Business Management Essentials",
+    "description": "Understand the fundamentals of business management, leadership, and entrepreneurship.",
+    "price": 129.99
+  },
+  {
+    "id": "7",
+    "category": "Photography",
+    "image": "/photography.jpg",
+    "title": "Photography Basics and Beyond",
+    "description": "Learn the art and science of photography, from camera settings to photo editing.",
+    "price": 119.99
+  },
+  {
+    "id": "8",
+    "category": "Personal Development",
+    "image": "/personal.jpg",
+    "title": "Personal Development and Productivity",
+    "description": "Improve your personal skills, time management, and productivity with proven strategies.",
+    "price": 89.99
+  },
+  {
+    "id": "9",
+    "category": "Finance",
+    "image": "/finance.jpg",
+    "title": "Financial Analysis and Investing",
+    "description": "Learn how to analyze financial statements and make informed investment decisions.",
+    "price": 159.99
+  },
+  {
+    "id": "10",
+    "category": "Health & Fitness",
+    "image": "/fitness.jpg",
+    "title": "Fitness and Nutrition Masterclass",
+    "description": "Get in shape and learn the fundamentals of fitness training and healthy nutrition.",
+    "price": 109.99
+  }
+]

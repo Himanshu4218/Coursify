@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "image": "/webdev.jpg",
+    "title": "Web Development",
+    "description": "Courses that teach you how to build websites and web applications using HTML, CSS, JavaScript, and various frameworks."
+  },
+  {
+    "id": "2",
+    "image": "/datascience.jpg",
+    "title": "Data Science",
+    "description": "Learn how to analyze, visualize, and make sense of data using tools like Python, R, and machine learning techniques."
+  },
+  {
+    "id": "3",
+    "image": "/design.jpg",
+    "title": "Design",
+    "description": "Explore courses focused on UI/UX design, graphic design, and creating visually compelling content."
+  },
+  {
+    "id": "4",
+    "image": "/programming.jpg",
+    "title": "Programming",
+    "description": "Courses that cover various programming languages and techniques, from beginner to advanced levels."
+  },
+  {
+    "id": "5",
+    "image": "/marketing.jpg",
+    "title": "Marketing",
+    "description": "Gain skills in digital marketing, social media strategies, and SEO to effectively promote products and services online."
+  },
+  {
+    "id": "6",
+    "image": "/business.jpg",
+    "title": "Business",
+    "description": "Learn the essentials of business management, entrepreneurship, and leadership to succeed in the corporate world."
+  },
+  {
+    "id": "7",
+    "image": "/photography.jpg",
+    "title": "Photography",
+    "description": "Courses that teach you the art and technique of photography, from camera settings to photo editing."
+  },
+  {
+    "id": "8",
+    "image": "/personal.jpg",
+    "title": "Personal Development",
+    "description": "Improve your personal skills, time management, and productivity with courses designed to help you grow."
+  },
+  {
+    "id": "9",
+    "image": "/finance.jpg",
+    "title": "Finance",
+    "description": "Understand financial analysis, investing, and managing personal or corporate finances effectively."
+  },
+  {
+    "id": "10",
+    "image": "/fitness.jpg",
+    "title": "Health & Fitness",
+    "description": "Courses focused on physical fitness, nutrition, and maintaining a healthy lifestyle."
+  }
+]
