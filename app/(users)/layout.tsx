@@ -9,22 +9,22 @@ export default function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { auth } = useAppSelector((state) => state.user);
+  const { accessToken } = useAppSelector((state) => state.user.userInfo);
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth?.accessToken) {
+    if (!accessToken) {
       router.push("/auth/login");
     }
-  }, [auth, router]);
+  }, [accessToken, router]);
 
-  if (!auth?.accessToken) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center text-2xl text-secondary font-medium">
-        Redirecting...
-      </div>
-    );
-  }
+  // if (!accessToken) {
+  //   return (
+  //     <div className="w-full h-screen flex justify-center items-center text-2xl text-secondary font-medium">
+  //       Redirecting...
+  //     </div>
+  //   );
+  // }
 
   return <>{children}</>;
 }

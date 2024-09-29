@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = await User.create({
+    await User.create({
       username,
       email,
       password: hashedPassword,
@@ -27,7 +27,6 @@ export async function POST(request: Request) {
       {
         message: "User created successfully",
         success: true,
-        newUser,
       },
       { status: 200 }
     );

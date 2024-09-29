@@ -12,17 +12,9 @@ import {
 import Heading from "@/app/components/typography/Heading";
 import Button from "@/app/components/buttons/Button";
 import Input from "@/app/components/input/Input";
-import { useAppSelector } from "@/redux/hook";
-import useAxiosPrivate from "@/app/hooks/useAxiosPrivate";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
-interface UserType {
-  _id: string;
-  username: string;
-  email: string;
-  isAdmin: boolean;
-}
 const Profile = () => {
-  const [userDetails, setUserDetails] = useState<UserType | null>(null);
   const [showCurrPass, setShowCurrPass] = useState<boolean>(false);
   const [showNewPass, setShowNewPass] = useState<boolean>(false);
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
@@ -30,8 +22,8 @@ const Profile = () => {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null); // File state
   const [updateLoading, setUpdateLoading] = useState<boolean>(false);
   const [passLoading, setPassLoading] = useState<boolean>(false);
-  const { auth } = useAppSelector((state) => state.user);
-  const axiosPrivate = useAxiosPrivate();
+  const { userInfo } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     currentPassword: "",
@@ -40,7 +32,7 @@ const Profile = () => {
   };
 
   const initialUserValues = {
-    firstName: userDetails?.username || "",
+    firstName: userInfo?.username || "",
     lastName: "",
   };
 
@@ -72,19 +64,6 @@ const Profile = () => {
       setProfileImageFile(file);
     }
   };
-
-  const getUserDetails = useCallback(async () => {
-    try {
-      const { data } = await axiosPrivate.get("/api/users/user-details");
-      setUserDetails(data);
-    } catch (error) {
-      console.log("Error while fetching data:" + error);
-    }
-  }, [setUserDetails, axiosPrivate]);
-
-  useEffect(() => {
-    getUserDetails();
-  }, [getUserDetails]);
 
   return (
     <WithContentWrapper className="bg-orangeLight pb-10">
@@ -146,7 +125,7 @@ const Profile = () => {
               label="First Name"
               type="text"
               placeholder="First Name"
-              value={userDetails?.username || ""}
+              value={userInfo?.username || ""}
               name="firstName"
               formik={userFormik}
             />
@@ -165,7 +144,7 @@ const Profile = () => {
               type="email"
               placeholder="user@pharmatop@gmail.com"
               name="email"
-              value={userDetails?.email || ""}
+              value={userInfo?.email || ""}
               disabled={true}
             />
           </div>

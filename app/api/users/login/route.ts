@@ -44,7 +44,17 @@ export async function POST(request: Request) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return NextResponse.json({ accessToken });
+    return NextResponse.json(
+      {
+        message: "Logged in successfully",
+        success: true,
+        user: {
+          isAdmin: user.isAdmin,
+          accessToken,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { error: "Something went wrong during login." + error.message },

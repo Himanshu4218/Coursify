@@ -44,7 +44,7 @@ const Footer = () => {
           <div className="flex flex-col gap-8">
             <h3 className="text-lg md:text-xl font-semibold">Contact</h3>
             <ul className="flex flex-col gap-4 text-sm md:text-base">
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-3 text-white">
                 <Image
                   src="/phone.png"
                   alt="phone"

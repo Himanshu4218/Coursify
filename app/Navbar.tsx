@@ -6,13 +6,13 @@ import Sidebar from "./Sidebar";
 import Avatar from "react-avatar";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useState } from "react";
-import axios from "./utils/apis/axios";
+import { axiosPrivate } from "./utils/apis/axios";
 import { data } from "@/app/data/allCourses";
 import { logoutUser } from "@/redux/features/user/userSlice";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { auth } = useAppSelector((state) => state.user);
+  const { userInfo } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const toggleDropdown = () => {
@@ -24,11 +24,13 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    await axios.get("/api/users/logout", {
-      withCredentials: true,
-    });
-    dispatch(logoutUser({ accessToken: "", persist: false }));
-    localStorage.setItem("persist", JSON.stringify(false));
+    try {
+      await axiosPrivate.get("/api/users/logout");
+      localStorage.setItem("persist", JSON.stringify(false));
+      dispatch(logoutUser());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -48,19 +50,33 @@ const Navbar = () => {
           </nav>
         </div>
         <Search data={data} />
-        {auth?.accessToken ? (
+        {userInfo?.accessToken ? (
           <nav className="hidden lg:block">
-            <ul className="flex items-center xl:gap-4 lg:gap-3 gap-2">
-              <Link href={"/courses"}>
-                <li>Courses</li>
-              </Link>
-              <Link href={"/certificate"}>
-                <li>Certificates</li>
-              </Link>
-              <Link href={"/mylearning"}>
-                <li className="whitespace-nowrap">My Learnings</li>
-              </Link>
-            </ul>
+            {userInfo?.isAdmin ? (
+              <ul className="flex items-center xl:gap-4 lg:gap-3 gap-2">
+                <Link href={"/admin/courses"}>
+                  <li>Courses</li>
+                </Link>
+                <Link href={"/admin/dashboard"}>
+                  <li>Dashboard</li>
+                </Link>
+                <Link href={"/admin/users"}>
+                  <li className="whitespace-nowrap">Users</li>
+                </Link>
+              </ul>
+            ) : (
+              <ul className="flex items-center xl:gap-4 lg:gap-3 gap-2">
+                <Link href={"/courses"}>
+                  <li>Courses</li>
+                </Link>
+                <Link href={"/certificate"}>
+                  <li>Certificates</li>
+                </Link>
+                <Link href={"/mylearning"}>
+                  <li className="whitespace-nowrap">My Learnings</li>
+                </Link>
+              </ul>
+            )}
           </nav>
         ) : (
           <div className="lg:flex gap-2 hidden">
@@ -76,7 +92,7 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-        {auth?.accessToken && (
+        {userInfo?.accessToken && (
           <div className="relative">
             <Avatar
               name="Foo Bar"
@@ -86,7 +102,11 @@ const Navbar = () => {
             />
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg overflow-hidden shadow-lg">
-                <Link href={"/user-profile"}>
+                <Link
+                  href={`${
+                    userInfo?.isAdmin ? "/admin/profile" : "/user-profile"
+                  }`}
+                >
                   <p
                     className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     onClick={closeDropdown}
@@ -95,12 +115,18 @@ const Navbar = () => {
                   </p>
                 </Link>
                 <hr className="border-t" />
-                <Link href={"/wishlist"}>
+                <Link
+                  href={`${
+                    userInfo?.isAdmin
+                      ? "/admin/add-termsconditions"
+                      : "/wishlist"
+                  }`}
+                >
                   <p
                     className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     onClick={closeDropdown}
                   >
-                    Wishlist
+                    {userInfo?.isAdmin ? "Terms & Conditions" : "Wishlist"}
                   </p>
                 </Link>
                 <hr className="border-t" />

@@ -1,20 +1,14 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import img from "@/public/assets/profile.jpg";
-
-const Input = dynamic(() => import("@/app/components/inputs/Input"));
-const Heading = dynamic(() => import("@/app/components/typography/Heading"));
-const Button = dynamic(() => import("@/app/components/buttons/Button"));
-
 import { GoPencil } from "react-icons/go";
 import { TbLogout2 } from "react-icons/tb";
 import { useFormik } from "formik";
 import { updateProfileSchema } from "@/app/utils/schema/schema";
 import { useCallback, useState } from "react";
-import { postRequest } from "@/app/utils/apis/apiRequests";
-import { ENDPOINTS } from "@/app/utils/apis/endpoints";
+import Input from "@/app/components/input/Input";
+import Heading from "@/app/components/typography/Heading";
+import Button from "@/app/components/buttons/Button";
 
 const Profile = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -84,13 +78,14 @@ const Profile = () => {
         className="w-52 h-52 rounded-full relative block"
       >
         <Image
-          src={preview || img}
+          src={"/men.png"}
+          width={300}
+          height={200}
           alt="image"
-          layout="fill"
           className="h-full w-full object-contain rounded-full"
         />
         <div className="bg-primary w-7 h-7 grid place-items-center rounded-full absolute right-8 bottom-1 cursor-pointer">
-          <GoPencil className="text-white" />
+          <GoPencil color="white" />
         </div>
         <input
           type="file"
@@ -102,15 +97,27 @@ const Profile = () => {
       </label>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <Input label="First Name" name="first_name" formik={formik} />
-        <Input label="Last Name" name="last_name" formik={formik} />
         <Input
+          id="firstName"
+          label="First Name"
+          name="firstName"
+          formik={formik}
+        />
+        <Input
+          id="lastName"
+          label="Last Name"
+          name="lastName"
+          formik={formik}
+        />
+        <Input
+          id="email"
           label="Email Address"
           type="email"
           name="email"
           formik={formik}
         />
         <Input
+          id="phoneNumber"
           label="Phone Number"
           name="phone"
           type="number"
@@ -121,18 +128,21 @@ const Profile = () => {
       <div className="space-y-4">
         <Heading label="Password and Authentication" />
         <Input
+          id="currentPassword"
           label="Current Password"
-          name="current_password"
+          name="currentPassword"
           type="password"
           formik={formik}
         />
         <Input
+          id="newPassword"
           label="New Password"
-          name="new_password"
+          name="newPassword"
           type="password"
           formik={formik}
         />
         <Input
+          id="confirmPassword"
           label="Confirm Password"
           name="confirm_password"
           type="password"

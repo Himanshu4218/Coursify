@@ -1,7 +1,7 @@
 import axios from "@/app/utils/apis/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-interface CourseType {
+export interface CourseType {
   _id: string;
   name: string;
   description: string;
@@ -9,29 +9,55 @@ interface CourseType {
   price: number;
   category: string;
   skills: string[];
-  languages: string[];
+  language: string;
 }
+
+interface StateType {
+  isLoading: boolean;
+  error: string | null;
+  page: number;
+  limit: number;
+  courses: CourseType[];
+  hasMore: boolean;
+}
+
+const initialState: StateType = {
+  courses: [],
+  isLoading: false,
+  error: null,
+  page: 1,
+  limit: 10,
+  hasMore: true,
+};
 
 export const getAllCourses = createAsyncThunk<
   CourseType[],
-  void,
-  { rejectValue: string }
->("course/getAllCourses", async (_, { rejectWithValue }) => {
-  try {
-    const { data } = await axios.get("/api/courses/getAllCourses");
-    return data.courses;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch courses"
-    );
-  }
-});
+  { page: number; limit: number },
+  { rejectValue: string; state: { course: StateType } }
+>(
+  "course/getAllCourses",
+  async ({ page, limit }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState().course;
 
-const initialState = {
-  courses: [] as CourseType[],
-  isLoading: false,
-  error: "" as string,
-};
+      if (!state.hasMore) {
+        return [];
+      }
+      const { data } = await axios.get(
+        `/api/courses/getAllCourses/?page=${page}&limit=${limit}`
+      );
+
+      if (data.courses.length === 0) {
+        return rejectWithValue("No more courses");
+      }
+      return data.courses;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch courses"
+      );
+    }
+  }
+);
 
 const courseSlice = createSlice({
   name: "course",
@@ -39,16 +65,29 @@ const courseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllCourses.pending, (state, payload) => {
+      .addCase(getAllCourses.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getAllCourses.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.courses = action.courses;
+        const uniqueCourses = action.payload.filter(
+          (newCourse) =>
+            !state.courses.some((course) => course._id === newCourse._id)
+        );
+
+        state.courses = [...state.courses, ...uniqueCourses];
+
+        if (action.payload.length < state.limit) {
+          state.hasMore = false;
+        }
       })
       .addCase(getAllCourses.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || "Failed to fetch categories";
+        if (action.payload === "No more courses") {
+          state.hasMore = false;
+        } else {
+          state.error = action.payload || "Failed to fetch courses";
+        }
       });
   },
 });

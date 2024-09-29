@@ -1,14 +1,12 @@
-import Modal from "@/app/components/modals/Modal";
-import useHookStore from "@/app/store/useHookStore";
-import { postRequest } from "@/app/utils/apis/apiRequests";
-import { ENDPOINTS } from "@/app/utils/apis/endpoints";
-import { modalTypes } from "@/app/utils/constants/data";
+// import { modalTypes } from "@/app/utils/constants/data";
+import Input from "@/app/components/input/Input";
+import Upload from "@/app/components/input/Upload";
+import Modal from "@/app/components/modal/Modal";
 import { addDocumentsSchema } from "@/app/utils/schema/schema";
+import { closeModal } from "@/redux/features/modal/modalSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useFormik } from "formik";
-import dynamic from "next/dynamic";
 import React, { useCallback, useState } from "react";
-const Input = dynamic(() => import("@/app/components/inputs/Input"));
-const UploadInput = dynamic(() => import("@/app/components/inputs/Upload"));
 
 const AddDocuments = ({
   courseId,
@@ -17,14 +15,14 @@ const AddDocuments = ({
 {
   courseId: string;
   setReload: () => void;
-  // onOpen: (value: boolean) => void;
+  onOpen: (value: boolean) => void;
 }) => {
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [fileErr, setFileErr] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { modalState, setModalState } = useHookStore();
+  const { isOpen } = useAppSelector((state) => state.modal);
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -98,21 +96,23 @@ const AddDocuments = ({
 
   return (
     <Modal
-      isOpen={modalState.toggleDocument}
+      isOpen={isOpen}
       label="Add Documents"
       onSubmit={onSubmit}
-      closeModalFunc={() => setModalState(false, modalTypes.toggleDocument)}
-      buttonTxt="Add Document"
+      onClose={() => dispatch(closeModal())}
+      buttonText="Add Document"
       isLoading={isLoading}
     >
       <div className="space-y-4">
         <Input
+          id="moduleName"
           label="Modules Name"
           name="module_name"
           formik={formik}
           disabled={isLoading}
         />
-        <UploadInput
+        <Upload
+          id="document"
           label="Document"
           type="Upload Document"
           onChange={uploadLogo}

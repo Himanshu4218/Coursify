@@ -111,7 +111,7 @@ const AddCource = ({ params }: { params: { type: string } }) => {
       courseImage: "",
     },
     validationSchema: addCourseSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         console.log(values);
         const { data } = await axiosPrivate.post(
@@ -120,6 +120,7 @@ const AddCource = ({ params }: { params: { type: string } }) => {
         );
         console.log(data);
         setPreview("");
+        resetForm();
       } catch (error) {
         console.log(error);
       }
@@ -184,18 +185,18 @@ const AddCource = ({ params }: { params: { type: string } }) => {
         }
       }
     },
-    [imageFile, formik]
+    [imageFile]
   );
 
   useEffect(() => {
-    dispatch(getAllCategories());
+    dispatch(getAllCategories({ page: 1, limit: 10 }));
   }, [dispatch]);
 
   const options =
     useMemo(
       () =>
         categories?.map((category) => ({
-          value: category?._id,
+          value: category?.name,
           label: category?.name,
         })),
       [categories]
@@ -255,7 +256,7 @@ const AddCource = ({ params }: { params: { type: string } }) => {
             id="courseImage"
             label="Course Image"
             onChange={onUpload}
-            preview={preview}
+            preview={preview as string}
             isError={fileErr}
             disabled={isLoading}
           />

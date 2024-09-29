@@ -1,14 +1,13 @@
-import { connect } from "@/dbConfig/db";
-import { NextResponse } from "next/server";
 import User from "@/models/userModel";
+import { connect } from "@/dbConfig/db";
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-export const runtime = "nodejs"; // Ensure this runs in Node.js runtime
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await connect();
+
     const authHeader = headers().get("Authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -18,15 +17,15 @@ export async function GET() {
     const accessToken = authHeader.split(" ")[1];
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET!);
 
-    const user = await User.findOne({ email: (decoded as any).email }).select(
-      "-password -refreshToken"
-    );
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!(decoded as any).isAdmin) {
+      return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
     }
 
-    return NextResponse.json(user, { status: 200 });
+    const allUsers = await User.find({
+      email: { $ne: (decoded as any).email },
+    }).select("-password -refreshToken");
+
+    return NextResponse.json({ users: allUsers }, { status: 200 });
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
       return NextResponse.json({ error: "Invalid token" }, { status: 403 });

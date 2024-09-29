@@ -1,23 +1,12 @@
-import dynamic from "next/dynamic";
 import React from "react";
-import Image, { StaticImageData } from "next/image";
-import img from "@/public/assets/landscape.jpg";
-
-const PiMicrosoftPowerpointLogoFill = dynamic(() =>
-  import("react-icons/pi").then((mod) => mod.PiMicrosoftPowerpointLogoFill)
-);
-const IoIosGlobe = dynamic(() =>
-  import("react-icons/io").then((mod) => mod.IoIosGlobe)
-);
-const AiOutlineFilePdf = dynamic(() =>
-  import("react-icons/ai").then((mod) => mod.AiOutlineFilePdf)
-);
-const FcVideoCall = dynamic(() =>
-  import("react-icons/fc").then((mod) => mod.FcVideoCall)
-);
+import Image from "next/image";
+import { FcVideoCall } from "react-icons/fc";
+import { AiOutlineFilePdf } from "react-icons/ai";
+import { IoIosGlobe } from "react-icons/io";
+import { PiMicrosoftPowerpointLogoFill } from "react-icons/pi";
 
 interface ViewCourseCardProps {
-  // img:StaticImageData,
+  img: string;
   courseName: string;
   courseCategory: string;
   description: string;
@@ -31,7 +20,7 @@ interface ViewCourseCardProps {
 }
 
 const ViewCourseCard: React.FC<ViewCourseCardProps> = ({
-  // img,
+  img,
   courseName,
   courseCategory,
   description,
@@ -48,9 +37,10 @@ const ViewCourseCard: React.FC<ViewCourseCardProps> = ({
       <div className="rounded-md relative">
         <Image
           src={img}
+          width={300}
+          height={300}
           alt="image"
           className="rounded-md object-contain"
-          priority
         />
         <div className="absolute text-white rounded-md bottom-0 w-2/3 p-2 backdrop-blur-2xl">
           <span>1750 Students Enrolled</span>
@@ -93,27 +83,24 @@ const ViewCourseCard: React.FC<ViewCourseCardProps> = ({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 grid place-items-center h-5 bg-gray-100 rounded-sm">
-                <AiOutlineFilePdf size={15} className="text-red-500" />
+              <div className="w-5 grid place-items-center h-5 text-red-500 bg-gray-100 rounded-sm">
+                <AiOutlineFilePdf size={15} />
               </div>
               <span className="font-medium text-[13px] min-w-max">
                 {documents?.length} Documents
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-5 w-5 grid place-items-center rounded-sm bg-gray-100">
-                <IoIosGlobe size={15} className="text-primary" />
+              <div className="h-5 w-5 grid place-items-center text-primary rounded-sm bg-gray-100">
+                <IoIosGlobe size={15} />
               </div>
               <span className="font-medium text-[13px] min-w-max">
                 {language}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 grid place-items-center bg-gray-100 rounded-sm">
-                <PiMicrosoftPowerpointLogoFill
-                  size={15}
-                  className="text-red-500"
-                />
+              <div className="w-5 h-5 grid place-items-center text-red-500 bg-gray-100 rounded-sm">
+                <PiMicrosoftPowerpointLogoFill size={15} />
               </div>
               <span className="font-medium text-[13px] min-w-max">
                 {presentations?.length} Presentations

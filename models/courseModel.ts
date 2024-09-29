@@ -27,7 +27,7 @@ const courseSchema = new mongoose.Schema(
       required: [true, "Please provide a course skills"],
     },
     language: {
-      type: [String],
+      type: String,
       required: [true, "Please provide a course language"],
     },
     level: {

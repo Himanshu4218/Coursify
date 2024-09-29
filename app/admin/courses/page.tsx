@@ -5,29 +5,16 @@ import CardShimmer from "@/app/components/skeletons/CardShimmer";
 import NewCard from "@/app/components/cards/NewCard";
 import PageHeadings from "@/app/components/typography/PageHeadings";
 import Pagination from "@/app/components/buttons/Pagination";
-
-interface CaourseTypes {
-  data: {
-    id: string | number;
-    category_id: number;
-    category_name: string;
-    course_image: string;
-    course_name: string;
-    description: string;
-    price: string;
-    skills: string[];
-    durations: string;
-    total_sold: string;
-  }[];
-  last_page: number;
-}
+import CourseCard from "@/app/components/pages/admin/courses/CourseCard";
+import { getAllCourses } from "@/redux/features/course/courseSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 const Cources = () => {
   const [page, setPage] = useState<number | string>(1);
-  const [courses, setCourses] = useState<CaourseTypes | null>(null);
   const [searchCourses, setSearchCourses] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isReload, setIsReload] = useState<boolean>(true);
+  const { isLoading, courses } = useAppSelector((state) => state.course);
+  const dispatch = useAppDispatch();
 
   //FOR CHANGE PAGES
   const changePages = useCallback(
@@ -49,9 +36,9 @@ const Cources = () => {
     [page]
   );
 
-  //   useEffect(() => {
-  //     getAllCourses(debouncedSearchCategories, Number(page || 1));
-  //   }, [page, debouncedSearchCategories, isReload]);
+  useEffect(() => {
+    dispatch(getAllCourses({ page: 1, limit: 10 }));
+  }, [dispatch]);
 
   return (
     <div className="space-y-7">
@@ -69,33 +56,28 @@ const Cources = () => {
         value={searchCourses}
         isLoading={isLoading}
       />
-      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Suspense fallback={<CardShimmer size={3} />}>
-          {courses?.data &&
-            (courses.data.length > 0 ? (
-              courses?.data?.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  setReload={() => setIsReload((prev) => !prev)}
-                  courseId={course?.id}
-                  category_name={course.category_name}
-                  course_image={course.course_image}
-                  title={course.course_name}
-                  description={course.description}
-                  price={Number(course.price)}
-                  skills={course.skills}
-                  duration={Number(course.durations)}
-                />
-              ))
-            ) : (
-              <span>No Record Found</span>
-            ))}
+          {courses?.map((course) => (
+            <CourseCard
+              key={course._id}
+              setReload={() => setIsReload((prev) => !prev)}
+              courseId={course?._id}
+              category_name={course.category}
+              course_image={course.image}
+              title={course.name}
+              description={course.description}
+              price={Number(course.price)}
+              skills={course.skills}
+              duration={Number(14)}
+            />
+          ))}
         </Suspense>
-      </div> */}
+      </div>
       <Pagination
         changePages={changePages}
         currentPage={page}
-        totalPages={courses?.last_page ? courses.last_page : 1}
+        totalPages={1}
         isLoading={isLoading}
       />
     </div>

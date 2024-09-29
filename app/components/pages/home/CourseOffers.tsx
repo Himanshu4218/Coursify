@@ -1,10 +1,12 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import WithContentWrapper from "@/app/components/wrappers/WithContentWraper";
 import Heading from "@/app/components/typography/Heading";
 import CardShimmer from "@/app/components/skeletons/CardShimmer";
 import UserCourseCard from "@/app/components/cards/UserCourseCard";
-import Courses from "@/app/data/courses.json";
+import { getAllCourses } from "@/redux/features/course/courseSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import Link from "next/link";
 
 interface userCourseDataProps {
   id: string;
@@ -16,28 +18,12 @@ interface userCourseDataProps {
 }
 
 const CourseOffers = () => {
-  // const [loading, setLoading] = useState<boolean>(false);
-  const [userCourseData, setUserCourseData] =
-    useState<userCourseDataProps[]>(Courses);
+  const { courses, isLoading } = useAppSelector((state) => state.course);
+  const dispatch = useAppDispatch();
 
-  // const getUserCourseData = useCallback(async () => {
-  //     try {
-  //         setLoading(true);
-  //         const url = `${ENDPOINTS.GET_USER_COURSE_DATA}?per_page=10`;
-  //         const response = await getRequest(url);
-  //         if (response?.data?.data) {
-  //             setUserCourseData(response?.data?.data);
-  //         }
-  //     } catch (error) {
-  //         console.log("Error while fetching user category data", error);
-  //     } finally {
-  //         setLoading(false);
-  //     }
-  // }, []);
-
-  // useEffect(() => {
-  //     getUserCourseData();
-  // }, [getUserCourseData]);
+  useEffect(() => {
+    dispatch(getAllCourses({ page: 1, limit: 10 }));
+  }, [dispatch]);
 
   return (
     <div className="bg-orangeLight">
@@ -57,17 +43,20 @@ const CourseOffers = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Suspense fallback={<CardShimmer size={6} />}>
-              {userCourseData &&
-                userCourseData.map((courseData, index) => (
+              {courses.map((courseData, index) => (
+                <Link
+                  href={`/admin/courses/view-course/${courseData._id}`}
+                  key={index}
+                >
                   <UserCourseCard
-                    key={index}
                     image={courseData.image}
                     category={courseData.category}
-                    title={courseData.title}
+                    title={courseData.name}
                     description={courseData.description}
                     price={courseData.price}
                   />
-                ))}
+                </Link>
+              ))}
             </Suspense>
           </div>
         </div>

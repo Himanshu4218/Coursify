@@ -22,8 +22,9 @@ export async function POST(request: Request) {
       price: coursePrice,
       image: courseImage,
       skills,
-      languages: contentLang,
+      language: contentLang,
     });
+    console.log(contentLang);
 
     return NextResponse.json(
       {

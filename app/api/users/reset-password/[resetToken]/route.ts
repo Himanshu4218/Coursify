@@ -19,7 +19,6 @@ export async function PUT(
 ) {
   try {
     await connect();
-    // const { resetToken } = request.url.slice()
 
     const { newPassword } = await request.json();
 

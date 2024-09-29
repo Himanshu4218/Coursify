@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import Input from "@/app/components/input/Input";
 import Button from "@/app/components/buttons/Button";
 import { loginSchema } from "@/app/utils/schema/schema";
-import axios from "@/app/utils/apis/axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -34,16 +33,9 @@ const Login = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      };
       try {
-        const { data } = await axios.post("/api/users/login", values, config);
         localStorage.setItem("persist", JSON.stringify(persist));
-        dispatch(loginUser({ ...data, persist }));
+        dispatch(loginUser(values));
         router.push("/");
         toast.success("Successfully Logged In");
       } catch (error) {

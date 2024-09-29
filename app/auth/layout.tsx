@@ -10,14 +10,14 @@ const AuthLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { auth } = useAppSelector((state) => state.user);
+  const { accessToken } = useAppSelector((state) => state.user.userInfo);
   const router = useRouter();
 
   useEffect(() => {
-    if (auth?.accessToken) {
+    if (accessToken) {
       router.push("/");
     }
-  }, [auth, router]);
+  }, [accessToken, router]);
   return (
     <div className="w-full h-screen flex">
       <div className="relative w-1/2 h-full flex items-center">

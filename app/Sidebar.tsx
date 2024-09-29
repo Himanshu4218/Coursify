@@ -9,7 +9,7 @@ import { useAppSelector } from "@/redux/hook";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { auth } = useAppSelector((state) => state.user);
+  const { userInfo } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (isOpen) {
@@ -59,7 +59,7 @@ const Sidebar = () => {
               );
             })}
           </ul>
-          {!auth?.accessToken && (
+          {!userInfo?.accessToken && (
             <div className="w-[95%] flex flex-col gap-4">
               <Link href={"/auth/register"}>
                 <button

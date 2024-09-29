@@ -1,15 +1,12 @@
 import React, { useCallback, useState } from "react";
-import dynamic from "next/dynamic";
-import Modal from "@/app/components/modals/Modal";
-import useHookStore from "@/app/store/useHookStore";
-import { modalTypes } from "@/app/utils/constants/data";
+// import { modalTypes } from "@/app/utils/constants/data";
 import { useFormik } from "formik";
 import { addPresentationSchema } from "@/app/utils/schema/schema";
-import { ENDPOINTS } from "@/app/utils/apis/endpoints";
-import { postRequest } from "@/app/utils/apis/apiRequests";
-
-const Input = dynamic(() => import("@/app/components/inputs/Input"));
-const UploadInput = dynamic(() => import("@/app/components/inputs/Upload"));
+import Modal from "@/app/components/modal/Modal";
+import Upload from "@/app/components/input/Upload";
+import { closeModal } from "@/redux/features/modal/modalSlice";
+import Input from "@/app/components/input/Input";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 const AddPresentations = ({
   courseId,
@@ -22,8 +19,8 @@ const AddPresentations = ({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [fileErr, setFileErr] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { modalState, setModalState } = useHookStore();
+  const { isOpen } = useAppSelector((state) => state.modal);
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -97,21 +94,23 @@ const AddPresentations = ({
 
   return (
     <Modal
-      isOpen={modalState.togglePresentation}
+      isOpen={isOpen}
       label="Add Presentation"
       onSubmit={onSubmit}
-      closeModalFunc={() => setModalState(false, modalTypes.togglePresentation)}
-      buttonTxt="Add Presentation"
+      onClose={() => dispatch(closeModal())}
+      buttonText="Add Presentation"
       isLoading={isLoading}
     >
       <div className="space-y-4">
         <Input
+          id="moduleName"
           label="Modules Name"
-          name="module_name"
+          name="moduleName"
           formik={formik}
           disabled={isLoading}
         />
-        <UploadInput
+        <Upload
+          id="presetation"
           label="Presentation"
           type="Upload Presentation"
           onChange={uploadLogo}

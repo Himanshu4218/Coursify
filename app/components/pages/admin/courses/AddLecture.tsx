@@ -1,15 +1,13 @@
-import Modal from "@/app/components/modals/Modal";
-import useHookStore from "@/app/store/useHookStore";
-import { getRequest, postRequest } from "@/app/utils/apis/apiRequests";
-import { ENDPOINTS } from "@/app/utils/apis/endpoints";
-import { modalTypes } from "@/app/utils/constants/data";
+// import { modalTypes } from "@/app/utils/constants/data";
+import Input from "@/app/components/input/Input";
+import TextArea from "@/app/components/input/TextArea";
+import Upload from "@/app/components/input/Upload";
+import Modal from "@/app/components/modal/Modal";
 import { addVideoLectureSchema } from "@/app/utils/schema/schema";
+import { closeModal } from "@/redux/features/modal/modalSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useFormik } from "formik";
-import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
-const Input = dynamic(() => import("@/app/components/inputs/Input"));
-const TextArea = dynamic(() => import("@/app/components/inputs/TextArea"));
-const UploadInput = dynamic(() => import("@/app/components/inputs/Upload"));
 
 const AddLecture = ({
   courseId,
@@ -28,8 +26,8 @@ const AddLecture = ({
   );
   const [fileErr, setFileErr] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { modalState, setModalState } = useHookStore();
+  const { isOpen } = useAppSelector((state) => state.modal);
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -119,21 +117,22 @@ const AddLecture = ({
 
   return (
     <Modal
-      isOpen={modalState.toggleLecture}
+      isOpen={isOpen}
       label="Add Video Lecture"
       onSubmit={onSubmit}
       isLoading={isLoading}
-      closeModalFunc={() => setModalState(false, modalTypes.toggleLecture)}
-      buttonTxt="Add Lecture"
+      onClose={() => dispatch(closeModal())}
+      buttonText="Add Lecture"
     >
       <div className="space-y-4 bg-white">
         <Input
+          id="moduleName"
           label="Modules Name"
-          name="module_name"
+          name="moduleName"
           formik={formik}
           disabled={isLoading}
         />
-        <UploadInput
+        <Upload
           label="Thumbnail"
           onChange={uploadLogo}
           preview={preview}
@@ -141,7 +140,7 @@ const AddLecture = ({
           isError={fileErr}
           disabled={isLoading}
         />
-        <UploadInput
+        <Upload
           label="Video"
           id="video-upload"
           onChange={uploadLogo}
@@ -150,6 +149,7 @@ const AddLecture = ({
           disabled={isLoading}
         />
         <TextArea
+          id="description"
           name="description"
           label="Description"
           formik={formik}

@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
@@ -18,11 +18,11 @@ interface userCategoryDataProps {
 }
 
 const CourseCategories = () => {
-  const { categories, isLoading } = useAppSelector((state) => state.category);
+  const { categories } = useAppSelector((state) => state.category);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getAllCategories());
+    dispatch(getAllCategories({ page: 1, limit: 10 }));
   }, [dispatch]);
 
   return (
@@ -36,7 +36,7 @@ const CourseCategories = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-4 px-0">
           <Suspense fallback={<CardShimmer size={6} />}>
-            {categories.map((courseCategory, index) => (
+            {categories.slice(0, 10).map((courseCategory, index) => (
               <CourseCategoryCard
                 key={index}
                 image={courseCategory.image}

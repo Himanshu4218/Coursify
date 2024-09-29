@@ -1,23 +1,20 @@
 "use client";
 
 import { useCallback } from "react";
-import axios from "../utils/apis/axios";
 import { useAppDispatch } from "@/redux/hook";
-import { loginUser } from "@/redux/features/user/userSlice";
+import { axiosPrivate } from "../utils/apis/axios";
+import { refreshAccessToken } from "@/redux/features/user/userSlice";
 
 const useRefreshToken = () => {
   const dispatch = useAppDispatch();
 
   const refresh = useCallback(async () => {
     try {
-      const { data } = await axios.get("/api/users/refresh", {
-        withCredentials: true,
-      });
+      const { data } = await axiosPrivate.get("/api/users/refresh");
 
       if (data.accessToken) {
-        dispatch(loginUser({ accessToken: data.accessToken }));
+        dispatch(refreshAccessToken(data.accessToken));
       }
-
       return data.accessToken;
     } catch (error) {
       console.log(error);

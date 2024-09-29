@@ -4,14 +4,14 @@ import { useAppSelector } from "@/redux/hook";
 import useRefreshToken from "./useRefreshToken";
 
 const useAxiosPrivate = () => {
-  const { auth } = useAppSelector((state) => state.user);
+  const { accessToken } = useAppSelector((state) => state.user.userInfo);
   const refresh = useRefreshToken();
 
   useEffect(() => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -35,7 +35,7 @@ const useAxiosPrivate = () => {
       axiosPrivate.interceptors.request.eject(requestInterceptor);
       axiosPrivate.interceptors.response.eject(responseInterceptor);
     };
-  }, [auth.accessToken, refresh]);
+  }, [accessToken, refresh]);
 
   return axiosPrivate;
 };

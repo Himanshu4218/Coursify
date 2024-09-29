@@ -8,8 +8,8 @@ interface ToggleProps {
   className?: string;
   options: {
     label: string;
-    icon: React.ReactNode;
-    onClick: () => void;
+    icon?: React.ReactNode;
+    onClick?: () => void;
     isDangerous?: boolean;
   }[];
 }
@@ -48,7 +48,7 @@ const Toggle: React.FC<ToggleProps> = ({ options, className }) => {
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        <IoEllipsisVertical />
+        <IoEllipsisVertical color="white" size={20} />
       </button>
       {isOpen && (
         <div

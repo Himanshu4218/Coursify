@@ -10,6 +10,7 @@ import { PiMicrosoftPowerpointLogoFill } from "react-icons/pi";
 import { FiEdit3 } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 import { useRouter } from "next/navigation";
+import Toggle from "@/app/components/buttons/Toggle";
 
 interface courseCardProps {
   title: string;
@@ -46,13 +47,13 @@ const CourseCard: React.FC<courseCardProps> = ({
     {
       label: "View Course",
       icon: <LuEye />,
-      onClick: () => router.push(UrlHelper.toViewCourse(courseId)),
+      // onClick: () => router.push(UrlHelper.toViewCourse(courseId)),
       // onClick: () => {},
     },
     {
       label: "Edit Course",
       icon: <FiEdit3 />,
-      onClick: () => router.push(UrlHelper.toEditCourse(courseId)),
+      // onClick: () => router.push(UrlHelper.toEditCourse(courseId)),
       // onClick: () => {},
     },
     {
@@ -68,10 +69,10 @@ const CourseCard: React.FC<courseCardProps> = ({
       <div className="w-full aspect-[2.5/1]">
         <Image
           src={course_image}
-          width={100}
-          height={100}
+          width={500}
+          height={250}
           alt="image"
-          className="h-full w-full rounded-md object-cover"
+          className="h-full w-full rounded-md object-cover object-center"
         />
       </div>
       <div className="">
@@ -79,7 +80,7 @@ const CourseCard: React.FC<courseCardProps> = ({
           <div>
             <span className="font-semibold text-lg">{title}</span>
             <li className="text-sm font-medium list-none text-greyPrimary">
-              {category_name || DEFAULT_MSG}
+              {category_name}
             </li>
           </div>
           <h1 className="text-3xl font-semibold text-[#FF9A08]">
@@ -101,7 +102,7 @@ const CourseCard: React.FC<courseCardProps> = ({
             ))
           ) : (
             <span className="text-sm font-medium list-none text-greyPrimary">
-              {DEFAULT_MSG}
+              {/* {DEFAULT_MSG} */}
             </span>
           )}
         </div>
@@ -147,10 +148,10 @@ const CourseCard: React.FC<courseCardProps> = ({
       <div className="">
         <p className="text-[15px] font-medium text-greySecondary">
           <span className="text-blackPrimary">Description: </span>
-          {description || DEFAULT_MSG}
+          {description}
         </p>
       </div>
-      <div className="text-greyPrimary absolute top-6 right-10 bg-greyDim w-9 h-9 grid place-items-center rounded-md cursor-pointer">
+      <div className="text-gray-600 absolute top-6 right-10 bg-greyDim w-9 h-9 grid place-items-center rounded-md cursor-pointer">
         <Toggle options={options} />
       </div>
     </div>

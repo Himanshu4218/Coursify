@@ -4,11 +4,11 @@ import { useFormik } from "formik";
 import Input from "@/app/components/input/Input";
 import Button from "@/app/components/buttons/Button";
 import { registerSchema } from "@/app/utils/schema/schema";
-import axios from "../../utils/apis/axios";
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "@/app/utils/apis/axios";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -28,19 +28,8 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
       try {
-        const { data } = await axios.post(
-          "/api/users/register",
-          values,
-          config
-        );
-        console.log(data);
+        await axios.post("/api/users/register", values);
         router.push("/auth/login");
         toast.success("Successfully registered");
       } catch (error) {

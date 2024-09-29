@@ -1,40 +1,28 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import { FaPlus, FaPlay } from "react-icons/fa6";
-import { MdOutlinePlayCircleOutline } from "react-icons/md";
 import { PiMicrosoftPowerpointLogoFill } from "react-icons/pi";
-import { SlOptionsVertical } from "react-icons/sl";
-import useHookStore from "@/app/store/useHookStore";
-import { modalTypes } from "@/app/utils/constants/data";
 import Toggle from "@/app/components/buttons/Toggle";
-import { LuEye } from "react-icons/lu";
-import { FiEdit3 } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
-import { UrlHelper } from "@/app/utils/UrlHealper";
-import { getRequest, postRequest } from "@/app/utils/apis/apiRequests";
-import { ENDPOINTS } from "@/app/utils/apis/endpoints";
 import Player from "../../courses/Player";
-
-const Button = dynamic(() => import("@/app/components/buttons/Button"));
-const DynamicReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { openModal } from "@/redux/features/modal/modalSlice";
+import Button from "@/app/components/buttons/Button";
 
 interface CourseDataProps {
-  course_name: string;
-  category_name: string;
+  name: string;
+  category: string;
   description: string;
   price: string | number;
-  course_image: string;
-  duration: string | number;
+  image: string;
+  duration?: string | number;
   skills: string[];
   language: string;
   videos?: videoProps[];
-  documents: documentProps[];
-  presentations: presentationProps[];
+  documents?: documentProps[];
+  presentations?: presentationProps[];
 }
 
 interface videoProps {
@@ -63,20 +51,20 @@ const CourseContentCard: React.FC<CourseContentCardProps> = ({
   courseData,
   setReload,
 }) => {
-  console.log("courseData", courseData);
-  const { modalState, setModalState } = useHookStore();
+  const { isOpen } = useAppSelector((state) => state.modal);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const onLectureOpen = () => {
-    setModalState(true, modalTypes.toggleLecture);
+    dispatch(openModal());
   };
 
   const onDocumentOpen = () => {
-    setModalState(true, modalTypes.toggleDocument);
+    dispatch(openModal());
   };
 
   const onPresentationOpen = () => {
-    setModalState(true, modalTypes.togglePresentation);
+    dispatch(openModal());
   };
 
   const handleDeleteModuleVideo = async (id: number) => {
@@ -140,11 +128,12 @@ const CourseContentCard: React.FC<CourseContentCardProps> = ({
                     height="100%"
                   />
                   {!isPlaying && (
-                    <FaPlay
-                      size={25}
+                    <span
                       onClick={() => setIsPlaying(true)}
                       className="text-white cursor-pointer absolute z-10"
-                    />
+                    >
+                      <FaPlay size={25} />
+                    </span>
                   )}
                   <div className="absolute top-5 right-5 text-white z-10">
                     <div className="text-white">
@@ -193,8 +182,8 @@ const CourseContentCard: React.FC<CourseContentCardProps> = ({
                     className="cursor-pointer"
                   >
                     <div className="flex items-center">
-                      <div className="p-2 m-2 bg-gray-50 rounded-md">
-                        <AiOutlineFilePdf className="text-red-700" size={35} />
+                      <div className="p-2 m-2 bg-gray-50 text-red-700 rounded-md">
+                        <AiOutlineFilePdf size={35} />
                       </div>
                       <span className="font-semibold text-[13px]">
                         {document.document_name}
@@ -235,11 +224,8 @@ const CourseContentCard: React.FC<CourseContentCardProps> = ({
                 >
                   <a href={presentation.document} target="_blank" key={index}>
                     <div className="flex items-center cursor-pointer">
-                      <div className="p-2 m-2 bg-gray-50 rounded-md">
-                        <PiMicrosoftPowerpointLogoFill
-                          className="text-red-700"
-                          size={35}
-                        />
+                      <div className="p-2 m-2 bg-gray-50 text-red-700 rounded-md">
+                        <PiMicrosoftPowerpointLogoFill size={35} />
                       </div>
                       <span className="font-semibold text-[13px]">
                         {presentation.document_name}

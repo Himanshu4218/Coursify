@@ -23,8 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          <Navbar />
           <RefreshToken />
+          <Navbar />
           {children}
           <Toaster toastOptions={{ duration: 1000 }} />
           <Footer />

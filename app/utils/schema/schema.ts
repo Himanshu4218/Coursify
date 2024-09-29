@@ -85,11 +85,50 @@ export const addCourseSchema = Yup.object({
     .max(20, "Content language must be at most 20 characters")
     .required("Content language is required"),
   courseName: Yup.string()
-    .max(20, "Course name must be at most 20 characters")
+    .max(50, "Course name must be at most 20 characters")
     .required("Course name is required"),
   coursePrice: Yup.string().required("Course price is required"),
   courseImage: Yup.string()
     .url("Image must be a valid URL")
     .required("Image is required"),
   courseDescription: Yup.string().required("Course description is required"),
+});
+
+export const addVideoLectureSchema = Yup.object({
+  moduleName: Yup.string().required("Module name is required"),
+  description: Yup.string().required("Description is required"),
+});
+
+export const addDocumentsSchema = Yup.object({
+  moduleName: Yup.string().required("Module name is required"),
+});
+
+export const addPresentationSchema = Yup.object({
+  moduleName: Yup.string().required("Module name is required"),
+});
+
+export const updateProfileSchema = Yup.object({
+  first_name: Yup.string()
+    .required("First name is required")
+    .min(2, "First name must be at least 2 characters")
+    .max(20, "First name must be less than 50 characters"),
+
+  last_name: Yup.string()
+    .required("Last name is required")
+    .min(2, "Last name must be at least 2 characters")
+    .max(20, "Last name must be less than 50 characters"),
+
+  phone: Yup.string()
+    .required("Phone number is required")
+    .matches(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+
+  current_password: Yup.string().required("Current password is required"),
+
+  new_password: Yup.string()
+    .required("New password is required")
+    .min(6, "New password must be at least 8 characters"),
+
+  confirm_password: Yup.string()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("new_password"), ""], "Passwords must match"),
 });

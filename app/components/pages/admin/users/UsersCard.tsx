@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import img from "@/public/assets/profile.jpg";
 
 interface UserCardProps {
   first_name?: string;
@@ -15,12 +14,18 @@ const UsersCard: React.FC<UserCardProps> = ({
   last_name = "Donin",
   email = "zaindonin1223@gmail.com",
   department = "Pharmalogy",
-  image = ""
+  image = "",
 }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[85px,1fr] gap-4 transition-all duration-300 rounded-md p-4 m-3 shadow-custom-light cursor-pointer hover:shadow-custom-medium">
       <div className="w-18 h-18 rounded-md">
-        <Image className="rounded-md object-cover w-full" src={img} alt="img" />
+        <Image
+          width={300}
+          height={200}
+          className="rounded-md object-cover w-full"
+          src={"/blog.png"}
+          alt="img"
+        />
       </div>
       <div className="list-none space-y-2 ">
         <li className="font-semibold text-base text-blackSecondary">
